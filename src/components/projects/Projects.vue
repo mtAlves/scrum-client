@@ -100,6 +100,29 @@
 						                </v-list>
 						              </v-flex>
 
+						              <v-flex xs10 offset-xs1>
+						                <v-list class="blue-grey lighten-1 ml-1">
+						                  <v-list-group class="green lighten-1">
+						                    <v-list-tile slot="item" @click="">
+						                      <v-list-tile-action>
+						                        <v-icon>insert_chart</v-icon>
+						                      </v-list-tile-action>
+						                      <v-list-tile-content>
+						                        <v-list-tile-title>Graficos</v-list-tile-title>
+						                      </v-list-tile-content>
+						                      <v-list-tile-action>
+						                        <v-icon color="blue-grey darken-4">keyboard_arrow_down</v-icon>
+						                      </v-list-tile-action>
+						                    </v-list-tile>
+						                    <v-list-tile class="blue-grey darken-2">
+						                      <v-list-tile-content>
+																		<doughnut/>
+						                      </v-list-tile-content>
+						                    </v-list-tile>
+						                  </v-list-group>
+						                </v-list>
+						              </v-flex>
+
 							          <v-flex xs12>
 							            <v-text-field box class="input-group--focused" multi-line label="Descrição" disabled v-model="project.description"></v-text-field>
 							          </v-flex>
@@ -117,8 +140,10 @@
 import axios from 'axios';
 import store from '@/core';
 import { mapActions, mapGetters } from 'vuex';
+import Doughnut from '../chart/Doughnut';
 
 export default {
+	components:{Doughnut},
   data () {
     return {
     	projectsUrl: 'project-list/'

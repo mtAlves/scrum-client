@@ -20,34 +20,36 @@
                 <h6>{{task.name}}</h6>
               </v-card-title>
 
-              <v-flex xs12 offset-xs4>
+              <v-flex xs12 offset-xs2>
+              {{reverseDate(task.started)}}
                 <v-tooltip top>
                   <v-btn icon slot="activator">
                     <v-icon color="grey darken-2">event</v-icon>
                   </v-btn>
-                  <span v-if="task.started" >{{reverseDate(task.started)}}</span>
-                  <span v-else>Data não informada</span>
+                  <span>Data de Inicio</span>
                 </v-tooltip>
-
+                {{reverseDate(task.due)}}
                 <v-tooltip top>
                   <v-btn icon slot="activator">
                     <v-icon v-if="task.due" color="grey darken-2">event_available</v-icon>
                     <v-icon v-else color="grey darken-2">event_busy</v-icon>
                   </v-btn>
-                  <span v-if="task.due">{{reverseDate(task.due)}}</span>
-                  <span v-else>Data não informada</span>
+                  <span>Data Final</span>
                 </v-tooltip>
               </v-flex>
 
-              <v-flex>
+              <v-flex xs12 offset-xs2>
                 <v-tooltip top>
                   <v-btn icon slot="activator">
                     <v-icon color="grey darken-2">person</v-icon>
                   </v-btn>
-                  <span v-if="task.responsible">{{userById(task.responsible)}}</span>
-                  <span v-else>Responsavel não informado</span>
+                  <span>Responsavel pela tarefa</span>
                 </v-tooltip>
+                <span v-if="task.responsible">{{userById(task.responsible)}}</span>
+                <span v-else>Responsavel não informado</span>
+              </v-flex>
 
+              <v-flex xs12 offset-xs3>
               <v-tooltip top>
                   <v-btn icon slot="activator">
                     <v-icon color="grey darken-2">description</v-icon>
