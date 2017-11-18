@@ -13,7 +13,7 @@ Vue.config.productionTip = false
 Vue.use(vuetify)
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${store.state.token}`;
-axios.defaults.baseURL = 'http://172.30.11.26:3000/scrum-list/';//http://172.30.11.26:3000/scrum-list/
+axios.defaults.baseURL = 'http://127.0.0.1:8000/scrum-list/';//http://172.30.11.26:3000/scrum-list/
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
