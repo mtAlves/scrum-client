@@ -3,7 +3,7 @@
     <v-flex xs12 sm8 offset-sm2 justify-space-between>
       <v-card class="blue-grey darken-3">
         <v-card-title>
-          <v-card-text class="title">REGISTER</v-card-text>
+          <v-card-text class="title">MINHA CONTA</v-card-text>
         </v-card-title>
         <v-card-text>
           <form @submit.prevent="register">
@@ -32,8 +32,8 @@
             <v-layout row >
               <v-flex xs6 class="mr-2">
                 <v-text-field
-                  label="Senha"
-                  v-model="user.password"
+                  label="Nova Senha"
+                  v-model="user.newPassword"
                   :append-icon="e1 ? 'visibility' : 'visibility_off'"
                   :append-icon-cb="() => (e1 = !e1)"
                   :type="e1 ? 'text' : 'password'"
@@ -53,7 +53,7 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
-            <v-btn class="cyan--text" type="submit">Registrar</v-btn>
+            <v-btn class="cyan--text" type="submit">Confirmar</v-btn>
           </form>
           <v-dialog v-model="dialog" >
             <v-btn icon @click.native="dialog = false" dark>
@@ -75,6 +75,7 @@ import axios from 'axios'
 import { Base } from './config'
 
 export default {
+  name: 'myAccount',
   data () {
     return {
       e1: false,
@@ -88,63 +89,37 @@ export default {
         v => /^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail inválido'
       ],
       passwordConfirm: '',
-      user: {
-        continuous_activities: [],
-        sprints: [],
-        tasks: [],
-        name: null,
-        user_name: null,
-        email: null,
-        description: null,
-        role: "user"
-      }
+      user: {}
     }
   },
   methods: {
-    lastCharIsBar (anUrl) {
-      if (anUrl != null) {
-        return anUrl.slice(-1) === '/'
-      }
-      return false
-    },
-    idFromUrl (anUrl) {
-      if (anUrl === null) {
-        return -1
-      }
-      // console.log(anUrl.slice(-1) == '/')
-      let i = this.lastCharIsBar(anUrl) ? 1 : 0
-      return parseInt(anUrl.split('/').reverse()[i])
-    },
     register () {
-      let url = 'user-list/register/'
-      if (this.user.password !== this.passwordConfirm || this.user.password === null || this.user.user_name === null) {
+      if (this.user.newPassword !== this.passwordConfirm || this.user.newPassword === null || this.user.user_name === null) {
         return this.dialog = true
       } else {
-        this.user.password = Base.encode(this.user.password)
-        console.log(this.user)
-        axios.post(url, this.user).then(response => {
-          if (response.status === 201) {
-            this.user.id = this.idFromUrl(response.headers['content-location'])
+        this.user.password = Base.encode(this.user.newPassword)
+        axios.put(`user-list/${this.$store.state.user.id}/`, this.user).then(response => {
             this.$store.commit('set_user', this.user)
             this.$store.commit('set_token', response.headers['x-access-token'])
             axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.state.token}`
             this.$store.commit('set_current_component_name', 'home')
-          }
         })
         .catch(error => console.log(error))
       }
     }
+  },
+  created: function () {
+  	axios.get(`user-list/${this.$store.state.user.id}/`).then(res => {
+  		this.user = res.data
+  	})
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
   .title {
     font-family: 'Architects Daughter';
     font-size: 3em !important;
     color: #00b2cc;
   }
-
 </style>
