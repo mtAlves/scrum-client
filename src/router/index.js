@@ -1,15 +1,79 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import state from '@/store/state'
+
+import login from '@/components/auth/login'
+import register from '@/components/auth/register'
+
+import home from '@/components/home/home'
+import continuousActivity from '@/components/continuous-activity/continuous-activity'
+import project from '@/components/project/project'
+import sprint from '@/components/sprint/sprint'
+import task from '@/components/task/task'
+import userTasks from '@/components/user-tasks/user-tasks'
 
 Vue.use(Router)
 
+function requireAuth (to, from, next) {
+  const auth = state.auth
+  if (auth.token === null || auth.username === null) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
+  } else {
+    next()
+  }
+}
+
 export default new Router({
+  mode: 'history',
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: register
+    },
+    {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home',
+      component: home,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/continuous_activity',
+      name: 'continuous_activity',
+      component: continuousActivity,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/project',
+      name: 'project',
+      component: project,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/sprint',
+      name: 'sprint',
+      component: sprint,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/task',
+      name: 'task',
+      component: task,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/user_tasks',
+      name: 'user_tasks',
+      component: userTasks,
+      beforeEnter: requireAuth
     }
   ]
 })
