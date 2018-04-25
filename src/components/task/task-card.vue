@@ -12,9 +12,9 @@
             <div v-for="(task, index) in cardTasks" :key="index">
               <v-flex xs12 class="mb-1" >
 
-                <v-card class="secondary ma-1 dark" v-if="name !== 'Pendente' && task.due == null || task.due > currentDate || name === 'Feito'">
+                <v-card class="secondary ma-1 dark" v-if="name === 'Feito' || name === 'Fazendo' && task.due >= currentDate || task.due == null && name !== 'Pendente'">
                   <v-card-title>
-                    <span style="width: 100%; text-align:left; ">{{task.name}}</span><br>
+                    <span style="width: 100%; text-align:left; ">{{ task.name }}</span><br>
                     <span style="width: 100%; text-align:left;">Inicio: {{task.started}} Fim: {{ task.due || 'Não informado'}}</span>
                     <span style="width: 100%; text-align:left;" v-if="task.responsible">Responsável: {{ responsible(task.responsible) }}</span>
                   </v-card-title>
@@ -133,6 +133,14 @@ export default {
     onAdd (event) {
       const movedTask = this.$store.state.movedTask
       movedTask.status = this.status.toString()
+      if (movedTask.status === '3') {
+        const impediment = {
+          name: `Impedimento | ${this.currentDate}`,
+          created_date: this.currentDate,
+          task: `${axios.defaults.baseURL}task-list/${movedTask.id}/`
+        }
+        axios.post('impediment-list/', impediment)
+      }
       axios.put(`task-list/${movedTask.id}/`, movedTask).then(res => {
         this.$store.dispatch('GETTASKS')
       }).catch(error => console.log(error))

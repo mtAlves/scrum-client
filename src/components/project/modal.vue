@@ -1,6 +1,6 @@
 <template>
   <v-card class="blue-grey darken-3 elevation-4">
-    <v-card-title class=" headline blue black--text">
+    <v-card-title class="blue black--text" style="font-size: 20px; padding: 10px;">
       {{ project.id === null ? 'Novo projeto' : 'Editar Projeto' }}
     </v-card-title>
     <v-card-text>

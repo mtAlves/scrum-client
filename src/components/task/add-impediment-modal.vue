@@ -1,6 +1,6 @@
 <template>
   <v-card >
-    <v-card-title class=" headline green white--text">
+    <v-card-title class="green white--text" style="font-size: 20px; padding: 10px;">
       Adicionar Impedimento
     </v-card-title>
     <v-card-text>
@@ -77,7 +77,6 @@ export default {
   methods: {
     createImpediment () {
       this.impediment.sprint = this.temp.sprint
-      console.log(this.impediment)
       axios.post('impediment-list/', this.impediment).then(res => {
         this.$store.dispatch('GETTASKS')
         this.$emit('close')

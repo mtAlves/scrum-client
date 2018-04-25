@@ -1,6 +1,6 @@
 <template>
   <v-card >
-    <v-card-title class=" headline green white--text">
+    <v-card-title class="green white--text" style="font-size: 20px; padding: 10px;">
       {{ task.id === null ? 'Nova Tarefa' : 'Editar Tarefa' }}
     </v-card-title>
     <v-card-text>

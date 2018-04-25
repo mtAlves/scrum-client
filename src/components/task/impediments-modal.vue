@@ -68,6 +68,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'impediments-modal',
   props: ['currentDate'],
@@ -95,7 +97,7 @@ export default {
   },
   methods: {
     editImpediment (impediment) {
-
+      axios.put(`impediment-list/${impediment.id}/`, impediment)
     },
     cancel () {
       this.$emit('close')
