@@ -5,12 +5,16 @@
         <div class="headline">{{ task.name }}</div>
         <span class="white--text subheading">Inicio: {{ task.started }} / Fim: {{ task.due || 'Não informado'}}</span>
       </div>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="close" class="red lighten-1">
+        <v-icon>close</v-icon>
+      </v-btn>
     </v-card-title>
     <v-card-text>
       <v-container grid-list-md>
         <v-layout wrap>
           <v-expansion-panel expand>
-            <v-expansion-panel-content v-for="(impediment, index) in impediments" :key="index" value="1" :class="impediment.resolution_date <= currentDate ? 'green darken-1 mb-1' : 'red darken-4 mb-1'">
+            <v-expansion-panel-content v-for="(impediment, index) in impediments" :key="index" :value="true" :class="impediment.resolution_date <= currentDate ? 'green darken-1 mb-1' : 'red darken-4 mb-1'">
               <div slot="header">{{ impediment.name }}</div>
               <v-card class="blue-grey darken-3">
                 <v-card-text>
@@ -26,19 +30,13 @@
                       </v-flex>
 
                       <v-flex xs12 sm5 offset-sm1>
-                        <v-menu lazy  :close-on-content-click="true"  v-model="menu_created"  transition="scale-transition" offset-y full-width  :nudge-left="40" max-width="290px">
-                          <v-text-field slot="activator" label="Data do impedimento" v-model="impediment.created_date" prepend-icon="event" readonly></v-text-field>
-                          <v-date-picker  v-model="impediment.created_date" no-title scrollable actions>
-                          </v-date-picker>
-                        </v-menu>
+                          <v-text-field label="Data do impedimento" v-model="impediment.created_date" prepend-icon="event" readonly></v-text-field>
+                          <v-date-picker  v-model="impediment.created_date" locale="pt-br" no-title style="transform: translateX(25%); border: 2px solid aliceblue; border-radius: 10px;"></v-date-picker>
                       </v-flex>
 
                       <v-flex xs12 sm5>
-                        <v-menu lazy  :close-on-content-click="true"  v-model="menu_resolution"  transition="scale-transition" offset-y full-width  :nudge-left="40" max-width="290px">
-                          <v-text-field slot="activator" label="Data da solução" v-model="impediment.resolution_date" prepend-icon="event" readonly></v-text-field>
-                          <v-date-picker v-model="impediment.resolution_date" no-title scrollable actions>
-                          </v-date-picker>
-                        </v-menu>
+                        <v-text-field label="Data de Solução" v-model="impediment.resolution_date" prepend-icon="event" readonly></v-text-field>
+                        <v-date-picker v-model="impediment.resolution_date" locale="pt-br" no-title style="transform: translateX(25%); border: 2px solid aliceblue; border-radius: 10px;"></v-date-picker>
                       </v-flex>
 
                     </v-layout>
@@ -47,10 +45,10 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn round class="blue" @click="editImpediment(impediment)">
-                    Confirmar
+                    Salvar Alteração
                   </v-btn>
-                  <v-btn round class="red lighten-2" @click="cancel">
-                    Cancelar
+                  <v-btn round class="red lighten-2" @click="deleteImpediment(impediment)">
+                    Deletar Impedimento
                   </v-btn>
                   <v-spacer></v-spacer>
                 </v-card-actions>
@@ -99,7 +97,13 @@ export default {
     editImpediment (impediment) {
       axios.put(`impediment-list/${impediment.id}/`, impediment)
     },
-    cancel () {
+    deleteImpediment (impediment) {
+      const impedimentIndex = this.impediments.indexOf(impediment)
+      axios.delete(`impediment-list/${impediment.id}/`).then(res => {
+        this.impediments.splice(impedimentIndex, 1)
+      }).catch(error => console.log(error))
+    },
+    close () {
       this.$emit('close')
     }
   }

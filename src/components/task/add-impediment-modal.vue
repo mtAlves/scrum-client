@@ -25,8 +25,8 @@
 
           <v-flex xs12 sm5>
             <v-menu lazy  :close-on-content-click="true"  v-model="menu_resolution"  transition="scale-transition" offset-y full-width  :nudge-left="40" max-width="290px">
-              <v-text-field slot="activator" label="Data da solução" v-model="impediment.resolution_date" prepend-icon="event" readonly></v-text-field>
-              <v-date-picker v-model="impediment.resolution_date" no-title scrollable actions>
+              <v-text-field slot="activator" label="Data da solução" v-model="resolution_date" prepend-icon="event" readonly></v-text-field>
+              <v-date-picker v-model="resolution_date" no-title scrollable actions>
               </v-date-picker>
             </v-menu>
           </v-flex>
@@ -63,10 +63,10 @@ export default {
         name: '',
         description: '',
         created_date: '',
-        resolution_date: '',
         sprint: null,
-        task: null
+        task: ''
       },
+      resolution_date: null,
       temp: {
         sprint: ''
       },
@@ -77,6 +77,7 @@ export default {
   methods: {
     createImpediment () {
       this.impediment.sprint = this.temp.sprint
+      if (this.resolution_date) this.impediment.resolution_date = this.resolution_date
       axios.post('impediment-list/', this.impediment).then(res => {
         this.$store.dispatch('GETTASKS')
         this.$emit('close')
@@ -87,10 +88,10 @@ export default {
         name: '',
         description: '',
         created_date: '',
-        resolution_date: '',
         sprint: null,
         task: null
       }
+      this.resolution_date = null
       this.$emit('close')
     },
     selectedSprint () {

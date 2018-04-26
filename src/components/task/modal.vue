@@ -103,6 +103,20 @@ export default {
     }
   },
   methods: {
+    createImpediment () {
+      const impediment = {
+        name: '',
+        description: '',
+        created_date: '',
+        resolution_date: null,
+        sprint: null,
+        task: null
+      }
+      axios.post('impediment-list/', impediment).then(res => {
+        this.$store.dispatch('GETTASKS')
+        this.$emit('close')
+      }).catch(error => console.log(error))
+    },
     createOrEditTask () {
       this.urlTemps()
       this.task.id === null

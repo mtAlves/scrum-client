@@ -12,22 +12,6 @@
             <div v-for="(task, index) in cardTasks" :key="index">
               <v-flex xs12 class="mb-1" >
 
-                <v-card class="secondary ma-1 dark" v-if="name === 'Feito' || name === 'Fazendo' && task.due >= currentDate || task.due == null && name !== 'Pendente'">
-                  <v-card-title>
-                    <span style="width: 100%; text-align:left; ">{{ task.name }}</span><br>
-                    <span style="width: 100%; text-align:left;">Inicio: {{task.started}} Fim: {{ task.due || 'Não informado'}}</span>
-                    <span style="width: 100%; text-align:left;" v-if="task.responsible">Responsável: {{ responsible(task.responsible) }}</span>
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-btn icon  @click="editTask(task)">
-                      <v-icon dark color="yellow lighten-3">edit</v-icon>
-                    </v-btn>
-                    <v-btn icon  @click="removeTask(task)">
-                      <v-icon dark color="red lighten-2">delete</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-
                 <v-card class="secondary ma-1 dark" v-if="name !== 'Pendente' && name !== 'Feito' && task.due < currentDate">
                   <v-card-title>
                     <span style="width: 100%; text-align:left;">{{task.name}}</span><br>
@@ -56,6 +40,22 @@
                         <v-icon color="white">add</v-icon>
                       </v-btn>
                     </div>
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-btn icon  @click="editTask(task)">
+                      <v-icon dark color="yellow lighten-3">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon  @click="removeTask(task)">
+                      <v-icon dark color="red lighten-2">delete</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+
+                <v-card class="secondary ma-1 dark" v-if="task.due >= currentDate || name === 'Feito'">
+                  <v-card-title>
+                    <span style="width: 100%; text-align:left; ">{{ task.name }}</span><br>
+                    <span style="width: 100%; text-align:left;">Inicio: {{task.started}} Fim: {{ task.due || 'Não informado'}}</span>
+                    <span style="width: 100%; text-align:left;" v-if="task.responsible">Responsável: {{ responsible(task.responsible) }}</span>
                   </v-card-title>
                   <v-card-actions>
                     <v-btn icon  @click="editTask(task)">
