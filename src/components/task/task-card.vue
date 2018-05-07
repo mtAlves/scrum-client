@@ -51,7 +51,7 @@
                   </v-card-actions>
                 </v-card>
 
-                <v-card class="secondary ma-1 dark" v-if="task.due >= currentDate || name === 'Feito'">
+                <v-card class="secondary ma-1 dark" v-if="(task.due >= currentDate || name === 'Feito') && name !== 'Pendente'">
                   <v-card-title>
                     <span style="width: 100%; text-align:left; ">{{ task.name }}</span><br>
                     <span style="width: 100%; text-align:left;">Inicio: {{task.started}} Fim: {{ task.due || 'Não informado'}}</span>
