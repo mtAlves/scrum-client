@@ -21,7 +21,7 @@
 
       <v-spacer></v-spacer>
 
-      <div v-if="getUser" class="blue--text"> {{ getUser.toUpperCase() }} </div>
+      <div v-if="loggedUser" class="blue--text"> {{ loggedUser }} </div>
 
       <v-menu offset-x left absolute :nudge-width="100">
         <v-toolbar-title slot="activator">
@@ -31,7 +31,7 @@
         </v-toolbar-title>
 
         <v-list>
-          <v-list-tile v-if="getUser" @click="logout">
+          <v-list-tile v-if="loggedUser" @click="logout">
             <v-list-tile-title class="red--text"> Logout </v-list-tile-title>
           </v-list-tile>
 
@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'App',
   data () {
@@ -79,10 +81,7 @@ export default {
     }
   },
   computed: {
-    getUser () {
-      const user = this.$store.state.auth.username
-      return user
-    }
+    ...mapGetters(['loggedUser'])
   }
 
 }

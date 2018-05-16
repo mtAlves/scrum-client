@@ -20,5 +20,8 @@ export default {
   },
   getMovedTask (state) {
     return state.movedTask
+  },
+  loggedUser (state) {
+    return state.auth.username
   }
 }

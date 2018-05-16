@@ -124,7 +124,10 @@ export default {
         axios.post(url, this.user).then(response => {
           if (response.status === 201) {
             this.user.id = this.idFromUrl(response.headers['content-location'])
-            this.$store.commit('login', this.user, response.headers['x-access-token'])
+            this.$store.commit('login', {
+              username: this.user.user_name,
+              token: response.headers['x-access-token']
+            })
             axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.state.token}`
             this.$router.push('/')
           }
