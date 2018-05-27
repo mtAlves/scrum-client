@@ -86,7 +86,6 @@
 </template>
 
 <script>
-import { idFromUrl } from '@/utils/utils'
 import axios from 'axios'
 import taskCard from './task-card'
 import addImpedimentModal from './add-impediment-modal'

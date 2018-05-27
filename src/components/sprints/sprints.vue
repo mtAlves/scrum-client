@@ -40,7 +40,6 @@
 <script>
 import axios from 'axios'
 import modal from './modal'
-import { idFromUrl } from '@/utils/utils'
 
 export default {
   name: 'sprint',

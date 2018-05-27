@@ -6,7 +6,7 @@
       <v-dialog v-model="error" max-width="290">
         <v-card>
           <v-card-actions>
-            <v-btn class="red darken-1" flat @click.native="error = false" block>LOGIN INVÁLIDO</v-btn>
+            <v-btn class="red darken-1" flat @click.native="error = false" block>Não foi possível fazer login</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -20,7 +20,7 @@
             <v-layout row>
               <v-flex xs12>
                 <v-text-field
-                  placeholder="Usuário" single-line v-model="user.user_name"
+                  placeholder="Usuário" single-line v-model="user.username"
                   append-icon="account_box" class="blue-grey--text mb-2" hide-details>
                 </v-text-field>
               </v-flex>
@@ -44,8 +44,6 @@
 
 <script>
 import axios from 'axios'
-import { Base } from '@/utils/base'
-import { idFromUrl } from '@/utils/utils'
 
 export default {
   name: 'login',
@@ -56,24 +54,17 @@ export default {
     }
   },
   methods: {
-    login () {
-      let url = 'user-list/login/'
-      this.user.password = Base.encode(this.user.password)
-      axios.post(url, this.user).then(response => {
-        if (response.status === 201) {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${response.headers['x-access-token']}`
-          this.$store.commit('login', {
-            id: idFromUrl(response.headers['content-location']),
-            username: this.user.user_name,
-            token: response.headers['x-access-token']
-          })
-          this.$store.dispatch('GETUSERS')
-          this.$router.push('/')
-        }
-      }).catch(error => {
-        console.log(error)
+    async login () {
+      try {
+        const authentication = await axios.post('/auth', this.user)
+        axios.defaults.headers.common['Authorization'] = authentication.data.auth.token
+        this.$store.commit('login', authentication.data.auth)
+        this.$store.dispatch('GETUSERS')
+        this.$router.push('/')
+      } catch (error) {
         this.error = true
-      })
+        console.log('Não foi possível fazer login', error)
+      }
     }
   }
 }

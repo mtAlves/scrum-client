@@ -10,7 +10,7 @@
             <v-layout row>
               <v-flex xs5 class="mr-2">
                 <v-text-field
-                  label="Nome do Usuário" v-model="user.user_name" :rules="emptyField"
+                  label="Nome de Usuário (LOGIN)" v-model="user.username" :rules="emptyField"
                   append-icon="account_box" class="blue-grey--text mb-2">
                   </v-text-field>
               </v-flex>
@@ -34,9 +34,9 @@
                 <v-text-field
                   label="Senha"
                   v-model="user.password"
-                  :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (e1 = !e1)"
-                  :type="e1 ? 'text' : 'password'"
+                  :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+                  :append-icon-cb="() => (showPassword = !showPassword)"
+                  :type="showPassword ? 'text' : 'password'"
                   counter :rules="emptyField"
                   class="blue-grey--text"
                 ></v-text-field>
@@ -45,9 +45,9 @@
                 <v-text-field
                   label="Confirmar Senha"
                   v-model="passwordConfirm"
-                  :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                  :append-icon-cb="() => (e1 = !e1)"
-                  :type="e1 ? 'text' : 'password'"
+                  :append-icon="showPassword ? 'visibility' : 'visibility_off'"
+                  :append-icon-cb="() => (showPassword = !showPassword)"
+                  :type="showPassword ? 'text' : 'password'"
                   counter :rules="emptyField"
                   class="blue-grey--text mb-2"
                 ></v-text-field>
@@ -61,7 +61,7 @@
             </v-btn>
             <v-card class="blue-grey darken-3 text-xs-center">
               <div class="headline text-xs-center red--text pa-2">ERRO</div>
-              <v-card-text class="blue--text">Por favor, verifique se as informações estão corretas.</v-card-text>
+              <v-card-text class="blue--text">Oops, tente mudar o Nome de Usuário e verifique a Senha.</v-card-text>
             </v-card>
           </v-dialog>
         </v-card-text>
@@ -72,13 +72,12 @@
 
 <script>
 import axios from 'axios'
-import { Base } from '@/utils/base'
 
 export default {
   name: 'register',
   data () {
     return {
-      e1: false,
+      showPassword: false,
       errorDialog: false,
       emptyField: [
         v => {
@@ -90,48 +89,28 @@ export default {
       ],
       passwordConfirm: '',
       user: {
-        continuous_activities: [],
-        sprints: [],
-        tasks: [],
         name: null,
-        user_name: null,
+        username: null,
         email: null,
-        description: null,
-        role: 'user'
+        password: null,
+        avatar: null
       }
     }
   },
   methods: {
-    lastCharIsBar (anUrl) {
-      if (anUrl != null) {
-        return anUrl.slice(-1) === '/'
-      }
-      return false
-    },
-    idFromUrl (anUrl) {
-      if (anUrl === null) {
-        return -1
-      }
-      let i = this.lastCharIsBar(anUrl) ? 1 : 0
-      return parseInt(anUrl.split('/').reverse()[i])
-    },
-    register () {
-      let url = 'user-list/register/'
-      if (this.user.password !== this.passwordConfirm || this.user.password === null || this.user.user_name === null) {
+    async register () {
+      try {
+        if (this.user.password !== this.passwordConfirm || this.user.password === null || this.user.username === null) {
+          this.errorDialog = true
+        }
+        const register = await axios.post('/users', this.user)
+        axios.defaults.headers.common['Authorization'] = register.data.token
+        this.$store.commit('login', register.data)
+        this.$store.dispatch('GETUSERS')
+        this.$router.push('/')
+      } catch (error) {
+        console.log(error)
         this.errorDialog = true
-      } else {
-        this.user.password = Base.encode(this.user.password)
-        axios.post(url, this.user).then(response => {
-          if (response.status === 201) {
-            this.user.id = this.idFromUrl(response.headers['content-location'])
-            this.$store.commit('login', {
-              username: this.user.user_name,
-              token: response.headers['x-access-token']
-            })
-            axios.defaults.headers.common['Authorization'] = `Bearer ${this.$store.state.token}`
-            this.$router.push('/')
-          }
-        }).catch(error => console.log(error))
       }
     }
   }
