@@ -11,7 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 Vue.config.productionTip = false
 Vue.use(Vuetify)
 
-axios.defaults.baseURL = 'http://172.30.10.86/scrum-list/'
+axios.defaults.baseURL = 'http://127.0.0.1:3000/'
 axios.defaults.headers.common['Accept'] = 'application/json'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 

@@ -1,13 +1,13 @@
 export default {
-  projects: null,
-  continuousActivity: null,
+  products: null,
   impediments: null,
   users: null,
   sprints: null,
   tasks: null,
   auth: {
-    username: null,
-    token: null
+    idUser: null,
+    token: null,
+    username: null
   },
   movedTask: null
 }

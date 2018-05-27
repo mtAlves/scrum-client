@@ -1,9 +1,6 @@
 export default {
-  projectsList (state, projectsList) {
-    state.projects = projectsList
-  },
-  continuousActivityList (state, continuousActivityList) {
-    state.continuousActivity = continuousActivityList
+  productsList (state, productsList) {
+    state.products = productsList
   },
   impedimentsList (state, impedimentsList) {
     state.impediments = impedimentsList
@@ -22,6 +19,7 @@ export default {
     state.auth = auth
   },
   logout (state) {
+    state.auth.idUser = null
     state.auth.username = null
     state.auth.token = null
   },

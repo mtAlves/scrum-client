@@ -6,11 +6,12 @@ import login from '@/components/auth/login'
 import register from '@/components/auth/register'
 
 import home from '@/components/home/home'
-import continuousActivity from '@/components/continuous-activity/continuous-activity'
-import project from '@/components/project/project'
-import sprint from '@/components/sprint/sprint'
-import task from '@/components/task/task'
-import userTasks from '@/components/user-tasks/user-tasks'
+
+import products from '@/components/products/main'
+import product from '@/components/products/product'
+
+import sprints from '@/components/sprints/sprints'
+import tasks from '@/components/tasks/tasks'
 
 Vue.use(Router)
 
@@ -30,6 +31,10 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '*',
+      redirect: '/'
+    },
+    {
       path: '/login',
       name: 'login',
       component: login
@@ -46,33 +51,27 @@ export default new Router({
       beforeEnter: requireAuth
     },
     {
-      path: '/continuous_activity',
-      name: 'continuous_activity',
-      component: continuousActivity,
+      path: '/products',
+      name: 'products',
+      component: products,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/product/:id',
+      name: 'product',
+      component: product,
+      beforeEnter: requireAuth,
+    },
+    {
+      path: '/sprints',
+      name: 'sprints',
+      component: sprints,
       beforeEnter: requireAuth
     },
     {
-      path: '/project',
-      name: 'project',
-      component: project,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/sprint',
-      name: 'sprint',
-      component: sprint,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/task',
-      name: 'task',
-      component: task,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/user_tasks',
-      name: 'user_tasks',
-      component: userTasks,
+      path: '/tasks',
+      name: 'tasks',
+      component: tasks,
       beforeEnter: requireAuth
     }
   ]

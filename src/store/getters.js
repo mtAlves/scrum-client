@@ -1,10 +1,7 @@
 export default {
 
-  getProjects (state) {
-    return state.projects
-  },
-  getContinuousActivity (state) {
-    return state.continuousActivity
+  getProducts (state) {
+    return state.products
   },
   getImpediments (state) {
     return state.impediments

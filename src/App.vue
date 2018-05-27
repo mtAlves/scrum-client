@@ -3,7 +3,7 @@
 
     <v-navigation-drawer clipped fixed v-model="drawer" app>
       <v-list dense>
-        <v-list-tile v-for="item in items" :key="item.title" :to="item.route" exact>
+        <v-list-tile v-for="item in navItems" :key="item.title" :to="item.route" exact>
           <v-list-tile-action>
             <v-icon :color="item.color">{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -21,7 +21,7 @@
 
       <v-spacer></v-spacer>
 
-      <div v-if="loggedUser" class="blue--text"> {{ loggedUser }} </div>
+      <div v-if="loggedUser" class="blue--text"> {{ loggedUser.toUpperCase() }} </div>
 
       <v-menu offset-x left absolute :nudge-width="100">
         <v-toolbar-title slot="activator">
@@ -64,13 +64,12 @@ export default {
   data () {
     return {
       drawer: true,
-      items: [
-        {title: 'Gestão de atividades', route: '/', icon: 'home', color: 'white'},
-        {title: 'Projetos', route: '/project', icon: 'format_list_numbered', color: 'blue'},
-        {title: 'Tarefas', route: '/task', icon: 'list', color: 'green'},
-        {title: 'Sprints', route: '/sprint', icon: 'motorcycle', color: 'yellow'},
-        {title: 'Tipo atividade contínua/extra etc', route: '/continuous_activity', icon: 'assignment', color: 'orange'},
-        {title: 'Tarefas por usuarios', route: '/user_tasks', icon: 'account_box', color: 'teal lighten-4'}
+      navItems: [
+        {title: 'Home', route: '/', icon: 'fas fa-home', color: 'white'},
+        {title: 'Products', route: '/products', icon: 'fas fa-dolly', color: 'blue'},
+        {title: 'Sprints', route: '/sprints', icon: 'fas fa-bicycle', color: 'yellow'},
+        {title: 'Tarefas', route: '/tasks', icon: 'fas fa-tasks', color: 'green'},
+        {title: 'Revisão', route: '/reviews', icon: 'fas fa-clipboard-list', color: 'orange'}
       ]
     }
   },

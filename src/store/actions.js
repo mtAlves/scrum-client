@@ -2,33 +2,28 @@ import axios from 'axios'
 
 export default {
 
-  GETPROJECTS ({ commit }) {
-    axios.get(`project-list/`)
-      .then(res => commit('projectsList', res.data))
-  },
-
-  GETCONTINUOUS ({ commit }) {
-    axios.get(`type-continuous-activity-list/`)
-      .then(res => commit('continuousActivityList', res.data))
+  GETPRODUCTS ({ commit }) {
+    axios.get('products/')
+      .then(res => commit('productsList', res.data))
   },
 
   GETIMPEDIMENTS ({ commit }) {
-    axios.get(`impediment-list/`)
+    axios.get('impediments/')
       .then(res => commit('impedimentsList', res.data))
   },
 
   GETUSERS ({ commit }) {
-    axios.get(`user-list/`)
+    axios.get('users/')
       .then(res => commit('usersList', res.data))
   },
 
   GETSPRINTS ({ commit }) {
-    axios.get(`sprint-list/`)
+    axios.get('sprints/')
       .then(res => commit('sprintsList', res.data))
   },
 
   GETTASKS ({ commit }) {
-    axios.get(`task-list/`)
+    axios.get('tasks/')
       .then(res => commit('tasksList', res.data))
   }
 
