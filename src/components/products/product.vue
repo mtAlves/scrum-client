@@ -57,18 +57,42 @@
                     <v-card-text
                       v-for="(backlog, index) in backlogsByImportance"
                       :key="index"
-                      :class="backlog.status === 3 ? 'done' : ''"
                     >
-                    <v-layout wrap>
-                    <v-flex xs9>
-                      <v-text-field class="input-group--focused" :label="`${index+1}. Backlog`" v-model="backlog.name" required :readonly="!allowEdit"></v-text-field>
-                    </v-flex>
+                      <v-layout wrap>
+                        <v-flex xs8>
+                          <v-text-field
+                            :color="colorByStatus(backlog.status)"
+                            class="input-group--focused"
+                            :label="`${index+1}. Backlog`"
+                            v-model="backlog.name"
+                            required :readonly="!allowEdit"></v-text-field>
+                        </v-flex>
 
-                    <v-flex xs3>
-                      <v-select class="input-group--focused" label="Importância" autocomplete v-model="backlog.importance" :items="[1, 2, 3, 4, 5]" :disabled="!allowEdit" required></v-select>
-                    </v-flex>
-                  </v-layout>
+                        <v-flex xs2>
+                          <v-select
+                            :color="colorByStatus(backlog.status)"
+                            class="input-group--focused"
+                            label="Importância" 
+                            v-model="backlog.importance"
+                            :items="[1, 2, 3, 4, 5]" 
+                            :disabled="!allowEdit" required></v-select>
+                        </v-flex>
+
+                        <v-flex xs2>
+                          <v-select
+                            :color="colorByStatus(backlog.status)"
+                            class="input-group--focused"
+                            label="Status" 
+                            v-model="backlog.status"
+                            :items="status" item-text="name" item-value="statusNumber"
+                            :disabled="!allowEdit" required></v-select>
+                        </v-flex>
+
+                      </v-layout>
                     </v-card-text>
+                    <v-btn icon class="blue darken-2" @click="addBacklogModal = true" v-show="!!allowEdit">
+                      <v-icon>add</v-icon>
+                    </v-btn>
                   </v-card>
                 </v-expansion-panel-content>
               </v-expansion-panel>
@@ -86,6 +110,10 @@
           </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
+
+        <v-dialog v-model="addBacklogModal" persistent max-width="580">
+          <modal-add-backlog @addBacklog="addBacklog" @close="addBacklogModal = false"></modal-add-backlog>
+        </v-dialog>
 
         <v-dialog v-model="deleteDialog" persistent max-width="350">
           <v-card>
@@ -106,10 +134,12 @@
 
 <script>
 import axios from 'axios'
+import modalAddBacklog from './modal-add-backlog'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'product_page',
+  components: { modalAddBacklog },
   data () {
     return {
       page: 1,
@@ -121,7 +151,14 @@ export default {
       productBacklogs: null,
       oldProductBacklogs: null,
       productOwner: null,
-      deleteDialog: false
+      deleteDialog: false,
+      addBacklogModal:false,
+      status: [
+        { name: 'A Fazer', statusNumber: 1 },
+        { name: 'Fazendo', statusNumber: 2 },
+        { name: 'Feito', statusNumber: 3 },
+        { name: 'Pendente', statusNumber: 4 }
+      ]
     }
   },
   methods: {
@@ -138,17 +175,28 @@ export default {
       await axios.put(`/products/${this.product.id}/`, this.product)
       this.$store.dispatch('GETPRODUCTS')
       this.productBacklogs.map(async backlog => {
-        await axios.put(`/products_backlog/${backlog.id}/`, backlog)
+        backlog.id
+          ? await axios.put(`/products_backlog/${backlog.id}/`, backlog)
+          : await axios.post('/products_backlog/', backlog)
       })
       this.allowEdit = false
     },
-    editProduct (){
+    editProduct () {
       this.oldProduct = {...this.product}
       this.allowEdit = true
     },
     cancelEdit () {
       this.product = this.oldProduct
       this.allowEdit = false
+    },
+    addBacklog (backlog) {
+      const newBacklog = { ...backlog, product_id: this.product.id }
+      this.productBacklogs.push(newBacklog)
+      this.addBacklogModal = false
+    },
+    colorByStatus (status) {
+      const colors = {1: 'yellow', 2: 'blue', 3: 'green', 4: 'red'}
+      return colors[status]
     }
   },
   computed: {
@@ -169,14 +217,5 @@ export default {
 </script>
 
 <style scoped>
-.done {
-  text-decoration: line-through;
-  text-decoration-color: #1976D2;
-  text-decoration-style: wavy;
-}
-.backlog-importance {
-  margin-left: 10px;
-  color: gray;
-  font-size: 12px;
-}
+
 </style>

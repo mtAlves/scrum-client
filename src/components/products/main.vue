@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import addProduct from './add-product'
 import { mapGetters } from 'vuex'
 
