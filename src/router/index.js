@@ -10,8 +10,10 @@ import home from '@/components/home/home'
 import products from '@/components/products/main'
 import product from '@/components/products/product'
 
-import sprints from '@/components/sprints/sprints'
-import tasks from '@/components/tasks/tasks'
+import sprints from '@/components/sprints/main'
+import sprint from '@/components/sprints/sprint'
+
+import tasks from '@/components/tasks/main'
 
 Vue.use(Router)
 
@@ -54,18 +56,24 @@ export default new Router({
       path: '/products',
       name: 'products',
       component: products,
-      beforeEnter: requireAuth,
+      beforeEnter: requireAuth
     },
     {
       path: '/product/:id',
       name: 'product',
       component: product,
-      beforeEnter: requireAuth,
+      beforeEnter: requireAuth
     },
     {
       path: '/sprints',
       name: 'sprints',
       component: sprints,
+      beforeEnter: requireAuth
+    },
+    {
+      path: '/sprint/:id',
+      name: 'sprint',
+      component: sprint,
       beforeEnter: requireAuth
     },
     {

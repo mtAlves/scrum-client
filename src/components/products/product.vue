@@ -55,7 +55,7 @@
                   <div slot="header">Backlogs ({{ productBacklogs.length }})</div>
                   <v-card>
                     <v-card-text
-                      v-for="(backlog, index) in backlogsByImportance"
+                      v-for="(backlog, index) in productBacklogs"
                       :key="index"
                     >
                       <v-layout wrap>
@@ -72,9 +72,9 @@
                           <v-select
                             :color="colorByStatus(backlog.status)"
                             class="input-group--focused"
-                            label="Importância" 
+                            label="Importância"
                             v-model="backlog.importance"
-                            :items="[1, 2, 3, 4, 5]" 
+                            :items="[1, 2, 3, 4, 5]"
                             :disabled="!allowEdit" required></v-select>
                         </v-flex>
 
@@ -82,7 +82,7 @@
                           <v-select
                             :color="colorByStatus(backlog.status)"
                             class="input-group--focused"
-                            label="Status" 
+                            label="Status"
                             v-model="backlog.status"
                             :items="status" item-text="name" item-value="statusNumber"
                             :disabled="!allowEdit" required></v-select>
@@ -152,7 +152,7 @@ export default {
       oldProductBacklogs: null,
       productOwner: null,
       deleteDialog: false,
-      addBacklogModal:false,
+      addBacklogModal: false,
       status: [
         { name: 'A Fazer', statusNumber: 1 },
         { name: 'Fazendo', statusNumber: 2 },
@@ -183,10 +183,12 @@ export default {
     },
     editProduct () {
       this.oldProduct = {...this.product}
+      this.oldProductBacklogs = this.productBacklogs.map(backlog => ({...backlog}))
       this.allowEdit = true
     },
     cancelEdit () {
       this.product = this.oldProduct
+      this.productBacklogs = this.oldProductBacklogs
       this.allowEdit = false
     },
     addBacklog (backlog) {
@@ -200,10 +202,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({users: 'getUsers'}),
-    backlogsByImportance () {
-      return this.productBacklogs.sort((a, b) => a.importance < b.importance ? 1 : -1)
-    }
+    ...mapGetters({users: 'getUsers'})
   },
   async created () {
     const product = await axios.get(`/products/${this.$route.params.id}`)
@@ -215,7 +214,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

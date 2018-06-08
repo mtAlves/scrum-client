@@ -28,7 +28,7 @@
       </div>
     </v-flex>
     <v-dialog v-model="addProductModal" persistent max-width="680">
-      <add-product @cancel="addProductModal = false"></add-product>
+      <add-product @close="addProductModal = false"></add-product>
     </v-dialog>
   </v-layout>
 </template>

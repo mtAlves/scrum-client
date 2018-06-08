@@ -28,7 +28,7 @@
               <v-date-picker locale="pt-BR" v-model="product.ended" no-title scrollable actions></v-date-picker>
             </v-menu>
           </v-flex>
-          
+
           <v-flex xs12 sm2>
             <v-btn icon color="blue darken-2" @click="addBacklogModal = true">
               <v-icon>add</v-icon>
@@ -78,7 +78,7 @@
       <v-btn round class="blue" @click="create">
         Confirmar
       </v-btn>
-      <v-btn round class="red lighten-2" @click="cancel">
+      <v-btn round class="red lighten-2" @click="close">
         Cancelar
       </v-btn>
       <v-spacer></v-spacer>
@@ -135,15 +135,15 @@ export default {
         })
         this.$store.dispatch('GETPRODUCTS')
         this.clearProductFields()
-        this.$emit('cancel')
+        this.$emit('close')
       } catch (error) {
         console.log(error)
       }
     },
-    cancel () {
-      this.$emit('cancel')
+    close () {
+      this.$emit('close')
     },
-    clearProductFields (){
+    clearProductFields () {
       this.product = {
         name: '',
         product_owner_id: null,

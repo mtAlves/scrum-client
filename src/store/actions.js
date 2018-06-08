@@ -2,29 +2,49 @@ import axios from 'axios'
 
 export default {
 
-  GETPRODUCTS ({ commit }) {
-    axios.get('products/')
-      .then(res => commit('productsList', res.data))
+  async GETPRODUCTS ({ commit }) {
+    try {
+      const products = await axios.get('products/')
+      commit('productsList', products.data)
+    } catch (error) {
+      console.log(error)
+    }
   },
 
-  GETIMPEDIMENTS ({ commit }) {
-    axios.get('impediments/')
-      .then(res => commit('impedimentsList', res.data))
+  async GETIMPEDIMENTS ({ commit }) {
+    try {
+      const impediments = await axios.get('impediments/')
+      commit('impedimentsList', impediments.data)
+    } catch (error) {
+      console.log(error)
+    }
   },
 
-  GETUSERS ({ commit }) {
-    axios.get('users/')
-      .then(res => commit('usersList', res.data))
+  async GETUSERS ({ commit }) {
+    try {
+      const users = await axios.get('users/')
+      commit('usersList', users.data)
+    } catch (error) {
+      console.log(error)
+    }
   },
 
-  GETSPRINTS ({ commit }) {
-    axios.get('sprints/')
-      .then(res => commit('sprintsList', res.data))
+  async GETSPRINTS ({ commit }) {
+    try {
+      const sprints = await axios.get('sprints/')
+      commit('sprintsList', sprints.data)
+    } catch (error) {
+      console.log(error)
+    }
   },
 
-  GETTASKS ({ commit }) {
-    axios.get('tasks/')
-      .then(res => commit('tasksList', res.data))
+  async GETTASKS ({ commit }) {
+    try {
+      const tasks = await axios.get('tasks/')
+      commit('tasksList', tasks.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 }
